@@ -8,10 +8,16 @@ let filename = Path.GetFileName("./Industrial_Society.txt")
 
 printfn $"{filename}, {dirname}\n"
 printfn "Hello from F#"
-let leb = []
+let mutable leb = []
 let rx = Regex(@"^\d+\. ",RegexOptions.Compiled)
 let lines = File.ReadLines(filename)
-lines |> Seq.iter(fun x -> if rx.IsMatch(x) then printfn "%s" x) 
+let a = 0
+for i in lines do 
+    if rx.IsMatch(i) then printfn "lol"
+    else leb <- [i]|>  List.append leb
+//for i in leb do
+//    printfn $"{i}"
+//lines |> Seq.iter(fun x -> if rx.IsMatch(x) then leb@x) 
 
 
 
