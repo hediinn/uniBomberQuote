@@ -8,32 +8,58 @@ let filename = Path.GetFileName("./Industrial_Society.txt")
 
 printfn $"{filename}, {dirname}\n"
 printfn "Hello from F#"
-let mutable leb = []
-let rx = Regex(@"^\d+(\.|,) \w",RegexOptions.Compiled)
-let rx2 = Regex(@"",RegexOptions.Compiled)
-let lines = File.ReadLines(filename)
-let mutable a = 0
+let lines = File.ReadAllLines(filename)|>List.ofSeq
+
+let rx = Regex(@"^\d+(\.|,)",RegexOptions.Compiled)
+let rx2 = Regex(@"\w+",RegexOptions.Compiled)
+
 let mutable s:string = ""
-for i in lines do
-    if rx.IsMatch(i) 
-    then 
-        s<-s + i 
-        printfn $"-- {i[0..10]}"
-    elif String.length i <1 && s.Length > 0
-    then 
-        leb<- [s] |> List.append leb 
-        s <- ""
-    elif String.length i >2 && s.Length >0
-    then 
-        s<-s+i
-    else 
-        printfn "??"
-
-printfn $"{leb[leb.Length-3..leb.Length-1]}"
-//for i in leb do
-//    printfn $"{i}"
-//lines |> Seq.iter(fun x -> if rx.IsMatch(x) then leb@x) 
+let mutable lineNumber:int = 0
+let mutable myLines:string list = []
+for line in lines do
+    
+    if rx.IsMatch(line) && line.Length >10
+    then
+        if lineNumber > 0 then myLines<-myLines @[s]
+        lineNumber <- lineNumber+1
+        s<- line
+    elif rx2.IsMatch(line) && lineNumber>0
+    then
+        s<- s+line
+    else
+        ignore ()
 
 
+myLines |> Seq.length |> printfn "%i"
+type typeOfSentence = |real =0|note=1|headers=2 
+type sentenceStruct(liness:string,typeoFs:typeOfSentence)=
+    let lines: string = liness
+    let typeOfs: typeOfSentence = typeoFs
+    member x.Lines:string = lines
+    member x.TypeOfs: typeOfSentence = typeOfs
 
+let startOfSentense (newline:string)= rx.IsMatch(newline) && newline.Length> 55
+let textOfSentence (newLine:string, linecount:int) = rx2.IsMatch(newLine) && linecount<3470
 
+let checkIfUpper (newline:string) = 
+    newline.Replace(' ','A') |> Seq.map(fun x -> if System.Char.IsUpper x then 1 else 0) |> Seq.sum
+    
+
+let findSentense (mLines:string list) = 
+    let sentence = mLines |> Seq.reduce (fun s1 s2 -> s1+"\n"+s2)
+    let sentence=sentence.Split("\n\n")
+    let myStruct = sentence |> Seq.map (fun x -> 
+                                            if startOfSentense x 
+                                            then 
+                                                new sentenceStruct(x, typeOfSentence.real)
+                                            elif checkIfUpper x>x.Length-6
+                                            then 
+                                                new sentenceStruct(x, typeOfSentence.headers)
+                                            else 
+                                                new sentenceStruct(x, typeOfSentence.note)
+                                        )
+
+    myStruct
+let myhead =lines |> findSentense|> Seq.toList
+myhead|> Seq.iteri(fun i x  -> if x.TypeOfs = typeOfSentence.headers then printfn $"{x.Lines} {i}")
+// 3470 birja notes
