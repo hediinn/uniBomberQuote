@@ -13,24 +13,6 @@ let lines = File.ReadAllLines(filename)|>List.ofSeq
 let rx = Regex(@"^\d+(\.|,)",RegexOptions.Compiled)
 let rx2 = Regex(@"\w+",RegexOptions.Compiled)
 
-let mutable s:string = ""
-let mutable lineNumber:int = 0
-let mutable myLines:string list = []
-for line in lines do
-    
-    if rx.IsMatch(line) && line.Length >10
-    then
-        if lineNumber > 0 then myLines<-myLines @[s]
-        lineNumber <- lineNumber+1
-        s<- line
-    elif rx2.IsMatch(line) && lineNumber>0
-    then
-        s<- s+line
-    else
-        ignore ()
-
-
-myLines |> Seq.length |> printfn "%i"
 type typeOfSentence = |real =0|note=1|headers=2 
 type sentenceStruct(liness:string,typeoFs:typeOfSentence)=
     let lines: string = liness
