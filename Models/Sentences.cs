@@ -1,5 +1,6 @@
 
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace uniBomberQuote.Models
@@ -14,7 +15,8 @@ namespace uniBomberQuote.Models
     }   
     public class Sentences
     {
-        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key,Column(Order=0)]
         public long sentenceId{ get; set; }
         public required SentenceType SentenceType { set; get; }
         public required string MySentences{ set; get; }

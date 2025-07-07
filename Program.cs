@@ -1,13 +1,12 @@
 
 using Microsoft.EntityFrameworkCore;
+using uniBomberQuote;
 using uniBomberQuote.Models;
-using System.IO;
 
-
-//List<String> test =
 
 var builder = WebApplication.CreateBuilder(args);
-
+using StreamReader reader = new StreamReader("Industrial_Society.txt");
+string[] strings = reader.ReadToEnd().Split("\n\n");
 
 builder.Services.AddDbContext<DataContext>(opts =>{
     opts.UseSqlite(builder.Configuration[
@@ -26,8 +25,11 @@ var context = app.Services.CreateScope()
     .ServiceProvider
     .GetRequiredService<DataContext>();
 
-SeedData.SeedDatabase(context);
 
-app.MapGet("/", () => $"{context.Sentences.First().SentenceType}");
+
+
+SentencesMaker.addAlldata(context, strings);
+
+app.MapGet("/", () => $"{context.Sentences.First().SentenceType}\n {context.Sentences.Count()}");
 
 app.Run();
