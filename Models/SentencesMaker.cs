@@ -13,12 +13,12 @@ namespace uniBomberQuote
         {
 
             SentenceType myType = SentenceType.test;
-            Regex myReg = new Regex(@"^\d+(\.|,) ");
-            if (myReg.IsMatch(sentences))
+
+            if (CheckReal(sentences))
             {
                 myType = SentenceType.real;
             }
-            else if (sentences.Length < 40)
+            else if (checkStrng(sentences))
             {
                 myType = SentenceType.headers;
             }
@@ -36,11 +36,31 @@ namespace uniBomberQuote
 
         public static void addAlldata(DataContext context1, string[] strings)
         {
-            foreach (string sen in strings)
+            if (!context1.DataSentences.Any())
             {
-                context1.Add(generateSentence(sen));
+                foreach (string sen in strings)
+                {
+
+                    context1.DataSentences.Add(generateSentence(sen));
+                    context1.SaveChanges();
+                }
             }
-            context1.SaveChanges();
+        }
+        private static bool checkStrng(string s)
+        {
+            s = s.Replace(" ", "");
+            s = s.Replace("‘", "");
+
+    Regex myReg1 = new Regex(@"^([A-Z]+|[A-Z][a-z]+)");
+            return myReg1.IsMatch(s) && s.Length < 70;
+        
+        }
+        private static bool CheckReal(string s)
+        {
+
+            Regex myReg = new Regex(@"^\d+(\.|,) ");
+            Regex myReg1 = new Regex(@"^\d+(\.|,) \(");
+            return myReg.IsMatch(s) && !myReg1.IsMatch(s);
         }
     }
 }

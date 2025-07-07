@@ -1,0 +1,28 @@
+@page "/App"
+@using Models
+@using Microsoft.EntityFrameworkCore;
+@inject DataContext Context;
+<body>
+    @code {
+        private Random ran = new Random();
+        private List<Sentences> Realsentencess = new();
+        private List<Sentences> Notesentencess = new();
+        private List<Sentences> HeaderSentencess = new();
+        private Sentences? sen;
+    
+    }
+    @{Realsentencess = Context.DataSentences.ToList().Where(f => f.SentenceType == SentenceType.real).ToList();}
+    @{Notesentencess = Context.DataSentences.ToList().Where(f => f.SentenceType == SentenceType.note).ToList();}
+    @{HeaderSentencess = Context.DataSentences.ToList().Where(f => f.SentenceType == SentenceType.headers).ToList();}
+    @{sen =Realsentencess.ToArray()[ran.Next(Realsentencess.Count-1)];}
+    <script src="_framework/blazor.web.js"></script>
+    
+<h1>Routing Example</h1>
+
+<p>
+    This page is reached at either <code>/blazor-route</code> or 
+    <code>/different-blazor-route</code>.
+</p>
+ 
+    <p>@sen.MySentences</p>
+</body>

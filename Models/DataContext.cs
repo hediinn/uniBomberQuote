@@ -11,8 +11,7 @@ namespace uniBomberQuote.Models
         {
 
         }
-        public DbSet<Sentences> Sentences => Set<Sentences>();
-
+        public DbSet<Sentences> DataSentences => Set<Sentences>();
 
     }
 }

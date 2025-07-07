@@ -7,7 +7,7 @@ namespace uniBomberQuote.Models {
         public static void SeedDatabase(DataContext context)
         { 
             context.Database.Migrate();
-            if (context.Sentences.Count() == 0)
+            if (context.DataSentences.Count() == 0)
             {
                 Sentences s1 = new()
                 {
@@ -16,7 +16,7 @@ namespace uniBomberQuote.Models {
                     SentenceType = SentenceType.test
                 };
                 Console.WriteLine($"{s1.MySentences}");
-                context.Sentences.Add(s1);
+                context.DataSentences.Add(s1);
                 context.SaveChanges();
 
             }
