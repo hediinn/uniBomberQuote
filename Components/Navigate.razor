@@ -1,0 +1,11 @@
+@page "/navigate"
+@inject NavigationManager NavigationManager
+
+@code {
+   string CurrUrl = null;
+   protected override void OnInitialized()
+   {
+       CurrUrl = NavigationManager.Uri.ToString();
+   }
+}
+@CurrUrl

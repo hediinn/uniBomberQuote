@@ -13,3 +13,6 @@ bld/
 database.db
 Migrations/
 uniBom*.sln
+.fake
+.code/
+.vscode/

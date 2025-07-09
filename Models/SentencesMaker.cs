@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using uniBomberQuote.Models;
 
-namespace uniBomberQuote
+namespace uniBomberQuote.Models
 {
 
     public class SentencesMaker
