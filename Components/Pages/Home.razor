@@ -15,7 +15,7 @@
     @{Realsentencess = Context.DataSentences.ToList().Where(f => f.SentenceType == SentenceType.real).ToList();}
     @{Notesentencess = Context.DataSentences.ToList().Where(f => f.SentenceType == SentenceType.note).ToList();}
     @{HeaderSentencess = Context.DataSentences.ToList().Where(f => f.SentenceType == SentenceType.headers).ToList();}
-    @{sen =Realsentencess.ToArray()[ran.Next(Realsentencess.Count-1)];}
+    @{sen = SentencesMaker.RandSent(Realsentencess);}
 <h1>Routing Example</h1>
 
  

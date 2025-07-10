@@ -62,5 +62,11 @@ namespace uniBomberQuote.Models
             Regex myReg1 = new Regex(@"^\d+(\.|,) \(");
             return myReg.IsMatch(s) && !myReg1.IsMatch(s);
         }
+        public static Sentences RandSent(List<Sentences> sen)
+        {
+            Random ran = new Random();
+            Sentences se = sen.ToArray()[ran.Next(sen.Count - 1)];
+            return se;
+        }
     }
 }
