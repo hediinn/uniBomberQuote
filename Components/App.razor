@@ -1,34 +1,30 @@
-@page "/"
-@using Models
-@using Microsoft.EntityFrameworkCore;
-<head>
+<html lang="en">
+<head> 
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+        <link rel="stylesheet" href="@Assets["lib/bootstrap/dist/css/bootstrap.min.css"]" />
+    <link rel="stylesheet" href="@Assets["app.css"]" />
+    <link rel="stylesheet" href="@Assets["BlazorWebAppAreaOfStaticSsrComponents.styles.css"]" />
+    <ImportMap />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <HeadOutlet @rendermode="RenderModeForPage" />
 </head>
-@inject DataContext Context;
-    @code {
-        private Random ran = new Random();
-        private List<Sentences> Realsentencess = new();
-        private List<Sentences> Notesentencess = new();
-        private List<Sentences> HeaderSentencess = new();
-        private Sentences? sen;
-    
-    }
-    @{Realsentencess = Context.DataSentences.ToList().Where(f => f.SentenceType == SentenceType.real).ToList();}
-    @{Notesentencess = Context.DataSentences.ToList().Where(f => f.SentenceType == SentenceType.note).ToList();}
-    @{HeaderSentencess = Context.DataSentences.ToList().Where(f => f.SentenceType == SentenceType.headers).ToList();}
-    @{sen =Realsentencess.ToArray()[ran.Next(Realsentencess.Count-1)];}
-    
-<h1>Routing Example</h1>
 
- 
-    <p>@sen.MySentences</p>
+<body>
+    <Routes @rendermode="RenderModeForPage" />
+    <script src="_framework/blazor.web.js"></script>
+</body>
 
-@inject NavigationManager UriHelper  
+</html>
 
-Navigate to other component <a href="" @onclick="Test">Click here</a>  
-@code {  
-    void NavigatetoNextComponent()  
-    {  
-        UriHelper.NavigateTo("Test/11");  
-    }  
-}  
-<Navigate/>
+@code {
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    private IComponentRenderMode? RenderModeForPage =>
+        HttpContext.Request.Path.StartsWithSegments("/account")
+            ? null
+            : InteractiveServer;
+    };
+}

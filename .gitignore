@@ -16,3 +16,4 @@ uniBom*.sln
 .fake
 .code/
 .vscode/
+wwwroot/lib/

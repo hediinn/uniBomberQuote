@@ -1,0 +1,32 @@
+@page "/test/{quary:int}"
+@using Models
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.EntityFrameworkCore
+
+<head>
+</head>
+@inject DataContext Context;
+    @{AllSentences = Context.DataSentences.ToList(); }
+    @{Realsentencess = AllSentences.Where(f => f.SentenceType == SentenceType.real).ToList();}
+    @{Notesentencess = AllSentences.Where(f => f.SentenceType == SentenceType.note).ToList();}
+    @{HeaderSentencess = AllSentences.Where(f => f.SentenceType == SentenceType.headers).ToList();}
+    @{sen =Realsentencess.ToArray()[ran.Next(Realsentencess.Count-1)];}
+    <p>dsa</p>
+    <p>asdss @quary</p>
+    @AllSentences[quary+3].MySentences
+@{whereTo = quary - AllSentences.GetRange(0,quary).Count;
+
+}
+    @code {
+    	[Parameter]
+        public int quary{get;set;}
+        private int whereTo = 0;
+        private Random ran = new Random();
+        private List<Sentences> AllSentences = new();
+        private List<Sentences> Realsentencess = new();
+        private List<Sentences> Notesentencess = new();
+        private List<Sentences> HeaderSentencess = new();
+        private Sentences? sen;
+
+    
+    }

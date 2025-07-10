@@ -4,7 +4,7 @@ using uniBomberQuote;
 using uniBomberQuote.Components;
 using uniBomberQuote.Models;
 using Microsoft.AspNetCore.HttpLogging;
-using Microsoft.AspNetCore.Http.HttpResults;
+
 
 var builder = WebApplication.CreateBuilder(args);
 using StreamReader reader = new StreamReader("Industrial_Society.txt");
@@ -19,20 +19,20 @@ builder.Services.AddDbContext<DataContext>(opts =>
 builder.Services.AddHttpLogging(logging =>
 { 
 });
-builder.Services.AddControllersWithViews();
-builder.Services.AddRazorComponents();
+builder.Services.AddRazorComponents()
+    .AddInteractiveServerComponents();
 
 var app = builder.Build();
-app.UseHttpLogging();
-//app.UseStaticFiles();
-app.MapControllers();
-app.MapRazorComponents<App>();
-//app.MapRazorComponents<App1>();
-app.UseRouting();
-//app.UseHttpsRedirection();
-
-
+app.UseHttpsRedirection();
 app.UseAntiforgery();
+app.UseHttpLogging();
+app.MapStaticAssets();
+
+
+app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
+//app.MapRazorComponents<App1>();
+
+
 var context = app.Services.CreateScope()
     .ServiceProvider
     .GetRequiredService<DataContext>();
