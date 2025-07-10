@@ -6,19 +6,39 @@
 @inject DataContext Context;
     @code {
         private Random ran = new Random();
+
+        private List<Sentences> AllSentences = new();
         private List<Sentences> Realsentencess = new();
         private List<Sentences> Notesentencess = new();
         private List<Sentences> HeaderSentencess = new();
         private Sentences? sen;
+        private Sentences idk(int q){
+            return AllSentences
+                .Where(f => f.MySentences.Contains($"{q}. ")|f.MySentences.Contains($"{q}, "))
+                .First();
+        }
+        private Sentences wtf(int q){
+            return AllSentences.GetRange(0,(int)idk(q).sentenceId)
+                .Where(f => f.SentenceType == SentenceType.headers)
+                .Last();
+
+
+        }
+
     
     }
-    @{Realsentencess = Context.DataSentences.ToList().Where(f => f.SentenceType == SentenceType.real).ToList();}
-    @{Notesentencess = Context.DataSentences.ToList().Where(f => f.SentenceType == SentenceType.note).ToList();}
-    @{HeaderSentencess = Context.DataSentences.ToList().Where(f => f.SentenceType == SentenceType.headers).ToList();}
-    @{sen = SentencesMaker.RandSent(Realsentencess);}
-<h1>Routing Example</h1>
 
- 
+    @{AllSentences = Context.DataSentences.ToList(); }
+    @{Realsentencess    = AllSentences.Where(f => f.SentenceType == SentenceType.real).ToList();}
+    @{Notesentencess    = AllSentences.Where(f => f.SentenceType == SentenceType.note).ToList();}
+    @{HeaderSentencess  = AllSentences.Where(f => f.SentenceType == SentenceType.headers).ToList();}
+    @{sen = SentencesMaker.RandSent(Realsentencess);}
+
+
+<h1>Unibombers manifesto</h1>
+<br>
+<h2>@wtf((int)sen.sentenceId).MySentences</h2>
+<div class="card">
     <p>@sen.MySentences</p>
 
-  
+</div>

@@ -24,11 +24,12 @@ builder.Services.AddRazorComponents()
 
 var app = builder.Build();
 app.UseHttpsRedirection();
-app.UseAntiforgery();
 app.UseHttpLogging();
+
+
+app.UseAntiforgery();
+
 app.MapStaticAssets();
-
-
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 //app.MapRazorComponents<App1>();
 

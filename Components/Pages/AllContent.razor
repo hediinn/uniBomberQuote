@@ -1,10 +1,5 @@
-@page "/test/{quary:int}"
-@using Models
-@using Microsoft.AspNetCore.Localization
-@using Microsoft.EntityFrameworkCore
-
-<head>
-</head>
+@page "/allContent"
+@using uniBomberQuote.Models
 @inject DataContext Context;
     @{AllSentences = Context.DataSentences.ToList(); }
     @{Realsentencess = AllSentences.Where(f => f.SentenceType == SentenceType.real).ToList();}
@@ -12,28 +7,25 @@
     @{HeaderSentencess = AllSentences.Where(f => f.SentenceType == SentenceType.headers).ToList();}
     @{sen = SentencesMaker.RandSent(Realsentencess);}
 
-<div class="card" style="margin:5px 0">
-    <div class="card-body">
-        <h5 class="card-title">@wtf().MySentences</h5>
-        <p class="card-text">@idk(quary).MySentences</p>
-        <p class="card-text" style="font-weight:bold">quary num = @quary</p>
 
+@foreach(var a in AllSentences){
+
+        @if(a.SentenceType == SentenceType.headers){
+            <h2>@a.MySentences</h2>
+        }else{
+    <div class="card" style="margin:5px 0">
+        <div class="card-body">
+            <p class="card-text">@a.MySentences </p>
+        </div>
     </div>
-</div>
-@{int a = quary + currentCount;}
-<p role="status">Current count: @a</p>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+        }
+}
+
 
 @code {
     private int currentCount = 0;
 
-    private void IncrementCount()
-    {
-        currentCount++;
-    }
-    	[Parameter]
-        public int quary{get;set;}
         private Random ran = new Random();
         private List<Sentences> AllSentences = new();
         private List<Sentences> Realsentencess = new();
@@ -46,8 +38,8 @@
                 .Where(f => f.MySentences.Contains($"{q}. ")|f.MySentences.Contains($"{q}, "))
                 .First();
         }
-        private Sentences wtf(){
-            return AllSentences.GetRange(0,(int)idk(quary).sentenceId)
+        private Sentences wtf(int q){
+            return AllSentences.GetRange(0,(int)idk(q).sentenceId)
                 .Where(f => f.SentenceType == SentenceType.headers)
                 .Last();
 
