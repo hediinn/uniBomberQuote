@@ -1,0 +1,40 @@
+@page "/test"
+@using uniBomberQuote.Client;
+
+@using uniBomberQuote.Shared.Models;
+@inject DataContext context;
+  @code {
+        private Random ran = new Random();
+
+        private List<MyText> AllSentences = new();
+        private List<MyText> Realsentencess = new();
+        private List<MyText> Notesentencess = new();
+        private List<MyText> HeaderSentencess = new();
+        private MyText? sen;
+        private MyText idk(int q){
+            return AllSentences
+                .Where(f => f.MySentences.Contains($"{q}. ")|f.MySentences.Contains($"{q}, "))
+                .First();
+        }
+        private MyText wtf(int q){
+            return AllSentences.GetRange(0,(int)idk(q).sentenceId)
+                .Where(f => f.SentenceType == SentenceType.headers)
+                .Last();
+
+
+        }
+
+    
+    }
+
+    @{AllSentences = context.DataSentences.ToList(); }
+    @{Realsentencess    = AllSentences.Where(f => f.SentenceType == SentenceType.real).ToList();}
+    @{Notesentencess    = AllSentences.Where(f => f.SentenceType == SentenceType.note).ToList();}
+    @{HeaderSentencess  = AllSentences.Where(f => f.SentenceType == SentenceType.headers).ToList();}
+    @{sen = SentencesMaker.RandSent(Realsentencess);}
+
+
+<MudText Class="mb-4">@sen.MySentences</MudText>
+<h1>wow</h1>
+
+

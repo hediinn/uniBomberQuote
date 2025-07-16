@@ -1,0 +1,23 @@
+@page "/tests/{CurrentCounterValue}"
+@using uniBomberQuote.Shared.Models;
+@inject DataContext context;
+<div>
+  CurrentCounterValue in MySecondComponent is @CurrentCounterValue
+</div>
+
+<MudText> @SentencesMaker.RandomWord(AllSentences)</MudText>
+
+<MudText Class="mb-4">Cc: @cc</MudText>
+
+<MudButton Color="Color.Primary" Variant="Variant.Filled" @onclick="newCC">Click me</MudButton>
+@code {
+  [Parameter]
+  public string CurrentCounterValue { get; set; } = "";
+  private List<MyText> AllSentences = new();
+  private string cc = "";
+
+  private void newCC(){
+    cc = cc+ " "+ SentencesMaker.RandomWord(AllSentences);
+  }
+}
+@{AllSentences = context.MySents();}
